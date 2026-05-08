@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import './components/featured-trailers.css';
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  src: url('~/assets/fonts/ieVi2ZhZI2eCN5jzbjEtdSl_-qYq2A.woff2')
+    format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Share Tech';
+  src: url('~/assets/fonts/sharetech.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  font-family:
+    'Roboto Condensed', 'Share Tech', 'Arial', 'Helvetica Neue', 'Helvetica',
+    sans-serif;
+}
