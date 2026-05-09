@@ -37,3 +37,7 @@ body {
   @apply h-[4.625rem] fixed bottom-0 w-full z-10;
 }
 
+.quick-book:before{
+  @apply left-0 right-full top-0 bottom-0 bg-[#f1bc00] w-[50vw]
+}
+
