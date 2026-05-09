@@ -1,4 +1,6 @@
 <script setup>
+import { ref } from 'vue';
+
 useHead({
   title: 'Home | Cinema Booking',
   meta: [
@@ -15,38 +17,136 @@ const {
   pending,
   error,
 } = await useFetch('/api/movies');
+
+// Carousel Navigation
+const carouselRef = ref(null);
+const scrollLeft = () => {
+  if (carouselRef.value) {
+    carouselRef.value.scrollBy({
+      left: -window.innerWidth,
+      behavior: 'smooth',
+    });
+  }
+};
+const scrollRight = () => {
+  if (carouselRef.value) {
+    carouselRef.value.scrollBy({ left: window.innerWidth, behavior: 'smooth' });
+  }
+};
 </script>
 
 <template>
   <main>
-    <!-- Hero Section -->
-    <section
-      class="relative w-full h-[60vh] bg-gray-900 flex items-center justify-center overflow-hidden"
-    >
-      <!-- Background placeholder (you can replace with an actual movie image later) -->
+    <!-- Hero Carousel Section -->
+    <section class="relative w-full h-[85vh] bg-black overflow-hidden group">
       <div
-        class="absolute inset-0 bg-gradient-to-r from-black via-gray-900 to-black opacity-80"
-      ></div>
-
-      <div class="relative z-10 text-center text-white px-4">
-        <!-- Using the custom 'tech' font here -->
-        <h1
-          class="font-tech text-5xl md:text-7xl mb-4 font-bold tracking-widest uppercase"
-        >
-          Welcome to Vue Cinema
-        </h1>
-        <p class="text-lg md:text-2xl mb-8 text-gray-300 max-w-2xl mx-auto">
-          Experience the latest blockbusters in ultimate comfort. Discover
-          what's on and book your seats today.
-        </p>
-
-        <NuxtLink
-          to="/whats-on"
-          class="bg-red-600 hover:bg-red-700 text-white font-tech text-xl px-10 py-4 rounded transition-colors duration-300 inline-block uppercase tracking-wider"
-        >
-          Get Tickets
-        </NuxtLink>
+        v-if="pending"
+        class="absolute inset-0 flex items-center justify-center text-white"
+      >
+        Loading top movies...
       </div>
+
+      <!-- Group everything else in a template to avoid v-else-if duplicated conditions -->
+      <template v-else-if="popularMoviesData?.results">
+        <!-- Arrow Controls (Hidden on mobile, visible on hover on large screens) -->
+        <button
+          @click="scrollLeft"
+          class="absolute left-0 top-0 bottom-0 w-[5vw] flex items-center justify-center z-30 bg-black/40 hover:bg-black/70 text-white opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex"
+        >
+          <Icon name="lucide:chevron-left" class="w-12 h-12" />
+        </button>
+        <button
+          @click="scrollRight"
+          class="absolute right-0 top-0 bottom-0 w-[5vw] flex items-center justify-center z-30 bg-black/40 hover:bg-black/70 text-white opacity-0 group-hover:opacity-100 transition-opacity hidden md:flex"
+        >
+          <Icon name="lucide:chevron-right" class="w-12 h-12" />
+        </button>
+
+        <div
+          ref="carouselRef"
+          class="flex w-full h-full overflow-x-auto snap-x snap-mandatory hide-scrollbar scroll-smooth"
+        >
+          <!-- Slides -->
+          <div
+            v-for="movie in popularMoviesData.results.slice(0, 4)"
+            :key="movie.id"
+            class="flex-shrink-0 w-full h-full snap-start relative flex flex-col items-center justify-end pb-12"
+          >
+            <!-- Blurred Backdrop Background -->
+            <div class="absolute inset-0 z-0 select-none pointer-events-none">
+              <img
+                :src="`https://image.tmdb.org/t/p/original${movie.backdrop_path}`"
+                class="w-full h-full object-cover opacity-30 blur-md"
+                alt=""
+              />
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"
+              ></div>
+            </div>
+
+            <!-- Foreground Content: Poster and Text -->
+            <div
+              class="relative z-10 w-[90vw] mx-auto px-[5vw] flex flex-col items-center"
+            >
+              <!-- Poster Image - Made Larger -->
+              <img
+                :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`"
+                :alt="movie.title"
+                class="w-full h-[55vh] object-cover object-center rounded-lg shadow-2xl mb-8 border border-gray-800"
+              />
+
+              <!-- Below Poster Layout -->
+              <div class="w-full flex items-center justify-between text-white">
+                <!-- Left: Play Button & Info -->
+                <div class="flex items-center gap-4">
+                  <!-- Play Trailer Button -->
+                  <button
+                    class="bg-red-600 rounded-full w-10 h-10 md:w-14 md:h-14 flex items-center justify-center hover:bg-red-700 transition flex-shrink-0 shadow-[0_0_15px_rgba(220,38,38,0.5)]"
+                  >
+                    <Icon
+                      name="lucide:play"
+                      class="text-white w-5 h-5 md:w-6 md:h-6 ml-1"
+                    />
+                  </button>
+
+                  <!-- Text - Size Reduced -->
+                  <div class="flex flex-col text-left">
+                    <h2
+                      class="font-tech text-xl md:text-3xl font-bold uppercase tracking-wide leading-tight"
+                    >
+                      {{ movie.title }}
+                    </h2>
+                    <p
+                      class="text-gray-400 text-[10px] md:text-xs uppercase tracking-widest mt-1"
+                    >
+                      Now playing at your local Vue cinema
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Right: Book Now Button -->
+                <div>
+                  <NuxtLink
+                    :to="`/book/${movie.id}`"
+                    class="bg-white hover:bg-gray-200 text-black font-tech font-bold text-sm md:text-lg px-6 py-3 md:px-8 md:py-4 rounded uppercase tracking-wider transition-colors inline-block"
+                  >
+                    Book Now
+                  </NuxtLink>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation Hint -->
+        <div
+          class="absolute bottom-4 left-0 w-full flex justify-center gap-2 z-20 pointer-events-none"
+        >
+          <p class="text-gray-500 text-xs uppercase tracking-widest font-tech">
+            Swipe to discover &rarr;
+          </p>
+        </div>
+      </template>
     </section>
 
     <!-- Featured Trailers Component -->
@@ -107,7 +207,9 @@ const {
         <div
           class="bg-gray-100 p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow"
         >
-          <h2 class="font-tech text-3xl font-bold mb-4">Premium Seating</h2>
+          <h2 class="font-tech text-black text-3xl font-bold mb-4">
+            Premium Seating
+          </h2>
           <p class="text-gray-700 mb-6">
             Upgrade your movie experience with our luxurious VIP recliners. Sit
             back, relax, and let the magic of cinema take over.
@@ -124,7 +226,9 @@ const {
         <div
           class="bg-gray-100 p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow"
         >
-          <h2 class="font-tech text-3xl font-bold mb-4">Family Tickets</h2>
+          <h2 class="font-tech text-black text-3xl font-bold mb-4">
+            Family Tickets
+          </h2>
           <p class="text-gray-700 mb-6">
             Bring the whole family and save with our special weekend family
             bundles. Valid for all standard screenings.
@@ -142,5 +246,11 @@ const {
 </template>
 
 <style scoped>
-/* Scoped styles can go here if needed */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
 </style>
