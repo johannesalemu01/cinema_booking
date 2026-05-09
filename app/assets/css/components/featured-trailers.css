@@ -14,4 +14,13 @@
   .featured-navigation li a {
     @apply text-gray-600 hover:text-black hover:border-b-2 hover:border-black pb-1 transition-colors duration-200 uppercase;
   }
+  .navigation-links li a {
+    @apply text-[#919191];
+  }
+  .navigation-links li a:hover,
+  .navigation-links li a.active,
+  .navigation-links li a.router-link-active {
+    @apply bg-gradient-to-r from-[#b74d1c] to-[#eec42a] text-transparent bg-clip-text;
+  }
+
 }

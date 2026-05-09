@@ -1,8 +1,8 @@
+@import './components/featured-trailers.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import './components/featured-trailers.css';
 
 @font-face {
   font-family: 'Roboto Condensed';
@@ -21,8 +21,19 @@
   font-display: swap;
 }
 
+
 body {
+  @apply bg-black text-white;
   font-family:
     'Roboto Condensed', 'Share Tech', 'Arial', 'Helvetica Neue', 'Helvetica',
     sans-serif;
 }
+
+
+
+/* footer */
+
+.quick-book{
+  @apply h-[4.625rem] fixed bottom-0 w-full z-10;
+}
+

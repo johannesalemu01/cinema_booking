@@ -2,9 +2,9 @@
 
 <template>
   <div>
-    <nav class="flex justify-evenly items-center">
+    <nav class="flex justify-evenly items-center navigation">
       <p class="text-2xl font-bold">Vue</p>
-      <ul class="flex gap-4 list-none">
+      <ul class="flex gap-4 list-none navigation-links">
         <li>
           <NuxtLink to="/whats-on">WHAT'S ON</NuxtLink>
         </li>
@@ -15,13 +15,13 @@
           <NuxtLink to="/coming-soon">COMING SOON</NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/">FAMILIES</NuxtLink>
+          <NuxtLink to="/families">FAMILIES</NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/">BIG SCREEN EVENTS</NuxtLink>
+          <NuxtLink to="/big-screen-events">BIG SCREEN EVENTS</NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/">GIFT CARDS</NuxtLink>
+          <NuxtLink to="/gift-cards">GIFT CARDS</NuxtLink>
         </li>
       </ul>
 
