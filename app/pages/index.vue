@@ -22,15 +22,24 @@ const {
 const carouselRef = ref(null);
 const scrollLeft = () => {
   if (carouselRef.value) {
-    carouselRef.value.scrollBy({
-      left: -window.innerWidth,
-      behavior: 'smooth',
-    });
+    const el = carouselRef.value;
+    if (el.scrollLeft <= 10) {
+      // Loop to end
+      el.scrollTo({ left: el.scrollWidth, behavior: 'smooth' });
+    } else {
+      el.scrollBy({ left: -window.innerWidth, behavior: 'smooth' });
+    }
   }
 };
 const scrollRight = () => {
   if (carouselRef.value) {
-    carouselRef.value.scrollBy({ left: window.innerWidth, behavior: 'smooth' });
+    const el = carouselRef.value;
+    if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 10) {
+      // Loop to start
+      el.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      el.scrollBy({ left: window.innerWidth, behavior: 'smooth' });
+    }
   }
 };
 </script>
@@ -38,7 +47,7 @@ const scrollRight = () => {
 <template>
   <main>
     <!-- Hero Carousel Section -->
-    <section class="relative w-full h-[85vh] bg-black overflow-hidden group">
+    <section class="relative w-full h-[522px] bg-black overflow-hidden group">
       <div
         v-if="pending"
         class="absolute inset-0 flex items-center justify-center text-white"
@@ -86,13 +95,13 @@ const scrollRight = () => {
 
             <!-- Foreground Content: Poster and Text -->
             <div
-              class="relative z-10 w-[90vw] mx-auto px-[5vw] flex flex-col items-center"
+              class="relative z-10 w-[90vw] h-full mx-auto px-[5vw] flex flex-col items-center justify-end"
             >
               <!-- Poster Image - Made Larger -->
               <img
                 :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`"
                 :alt="movie.title"
-                class="w-full h-[55vh] object-cover object-center rounded-lg shadow-2xl mb-8 border border-gray-800"
+                class="w-full flex-1 min-h-0 object-contain object-center rounded-lg shadow-2xl mb-6 mt-4"
               />
 
               <!-- Below Poster Layout -->
@@ -128,7 +137,7 @@ const scrollRight = () => {
                 <div>
                   <NuxtLink
                     :to="`/book/${movie.id}`"
-                    class="bg-white hover:bg-gray-200 text-black font-tech font-bold text-sm md:text-lg px-6 py-3 md:px-8 md:py-4 rounded uppercase tracking-wider transition-colors inline-block"
+                    class="custom-book-btn font-tech font-bold hover:shadow-[0_0_15px_rgba(238,196,42,0.4)]"
                   >
                     Book Now
                   </NuxtLink>
@@ -252,5 +261,24 @@ const scrollRight = () => {
 .hide-scrollbar {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+.custom-book-btn {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  padding: 1em 1.875em;
+  color: #fff;
+  background: none;
+  text-transform: uppercase;
+  font-size: 1rem;
+  transition-duration: 0.27s;
+  transition-property: color, box-shadow, text-shadow;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  border-style: solid;
+  border-width: 2px;
+  border-color: transparent #eec42a transparent #b74d1c;
 }
 </style>

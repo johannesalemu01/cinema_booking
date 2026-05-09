@@ -1,8 +1,8 @@
 <script setup></script>
 
 <template>
-  <div>
-    <nav class="flex justify-evenly items-center navigation">
+  <header>
+    <nav class="flex justify-evenly items-center navigation h-[86px] px-2 py-2">
       <p class="text-2xl font-bold">Vue</p>
       <ul class="flex gap-4 list-none navigation-links">
         <li>
@@ -35,7 +35,7 @@
         </button>
       </div>
     </nav>
-  </div>
+  </header>
 </template>
 
 <style scoped></style>
