@@ -1,4 +1,10 @@
 <script setup>
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Autoplay, Navigation } from 'swiper/modules';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+
 defineProps({
   movies: {
     type: Array,
@@ -38,7 +44,7 @@ defineProps({
         :speed="800"
         :autoplay="{ delay: 5000, disableOnInteraction: false }"
         :navigation="{ nextEl: '.custom-next', prevEl: '.custom-prev' }"
-        :modules="[SwiperAutoplay, SwiperNavigation]"
+        :modules="[Autoplay, Navigation]"
         class="w-full h-full"
       >
         <!-- Slides -->
@@ -171,7 +177,9 @@ defineProps({
   -webkit-backdrop-filter: blur(24px);
   backdrop-filter: blur(24px);
   background-color: transparent;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
 }
 
 .play-button:hover {

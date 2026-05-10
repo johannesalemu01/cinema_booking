@@ -1,6 +1,6 @@
 <script setup>
 useHead({
-  title: 'What\'s On | Cinema Booking',
+  title: "What's On | Cinema Booking",
   meta: [
     {
       name: 'description',
@@ -25,7 +25,9 @@ const {
       <h1 class="font-tech text-4xl font-bold uppercase text-white mb-2">
         What's On
       </h1>
-      <p class="text-gray-400 font-roboto">Find out what's playing right now!</p>
+      <p class="text-gray-400 font-roboto">
+        Find out what's playing right now!
+      </p>
     </div>
 
     <!-- Reusable Hero Carousel -->
